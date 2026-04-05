@@ -4,7 +4,12 @@ import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import { prisma } from './prisma'
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+const {
+  handlers,
+  auth,
+  signIn,
+  signOut,
+} = NextAuth({
   secret: process.env.AUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -14,6 +19,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       allowDangerousEmailAccountLinking: true,
     }),
     Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
       allowDangerousEmailAccountLinking: true,
     }),
   ],
@@ -28,5 +35,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   pages: {
     signIn: '/login',
+    error: '/login',
   },
+  debug: process.env.NODE_ENV === 'development',
 })
+
+export { handlers, auth, signIn, signOut }
