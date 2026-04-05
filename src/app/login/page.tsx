@@ -1,14 +1,9 @@
-import { auth } from '@/lib/auth'
-import { redirect } from 'next/navigation'
+'use client'
+
+import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 
-export default async function LoginPage() {
-  const session = await auth()
-
-  if (session?.user) {
-    redirect('/dashboard')
-  }
-
+export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#0d1117]">
       <div className="w-full max-w-md rounded-lg border border-[#30363d] bg-[#161b22] p-8">
@@ -18,9 +13,8 @@ export default async function LoginPage() {
         </div>
 
         <div className="space-y-4">
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a
-            href="/api/auth/signin/github"
+          <button
+            onClick={() => signIn('github', { callbackUrl: '/dashboard' })}
             className="flex w-full items-center justify-center gap-3 rounded-md border border-[#30363d] bg-[#21262d] px-4 py-3 text-white transition-colors hover:bg-[#30363d]"
           >
             <svg
@@ -35,11 +29,10 @@ export default async function LoginPage() {
               />
             </svg>
             Continue with GitHub
-          </a>
+          </button>
 
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a
-            href="/api/auth/signin/google"
+          <button
+            onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
             className="flex w-full items-center justify-center gap-3 rounded-md border border-[#30363d] bg-[#21262d] px-4 py-3 text-white transition-colors hover:bg-[#30363d]"
           >
             <svg
@@ -53,7 +46,7 @@ export default async function LoginPage() {
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
             </svg>
             Continue with Google
-          </a>
+          </button>
         </div>
 
         <p className="mt-6 text-center text-sm text-gray-500">
